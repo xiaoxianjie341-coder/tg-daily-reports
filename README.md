@@ -9,3 +9,4 @@ GitHub Pages: https://xiaoxianjie341-coder.github.io/tg-daily-reports/
 ## 历史报告
 
 查看 `archives/` 目录获取历史日报。
+
