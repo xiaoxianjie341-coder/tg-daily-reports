@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pickle Fight Club🥒每日情报</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .top-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .header-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .header-title {
+            font-size: 32px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
+        }
+
+        .header-date {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .header-source {
+            font-size: 14px;
+            color: #999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .section {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 5px;
+            height: 28px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 3px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .key-moments {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            line-height: 1.8;
+            color: #555;
+        }
+
+        .topics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 12px;
+        }
+
+        .topic-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 12px;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .topic-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+            z-index: 10;
+        }
+
+        .topic-header {
+            margin-bottom: 8px;
+        }
+
+        .topic-category {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .category-tech { background: #e3f2fd; color: #1976d2; }
+        .category-community { background: #f3e5f5; color: #7b1fa2; }
+        .category-achievement { background: #e8f5e9; color: #388e3c; }
+        .category-market { background: #fff3e0; color: #f57c00; }
+        .category-invest { background: #fce4ec; color: #c2185b; }
+
+        .topic-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 6px;
+            line-height: 1.3;
+        }
+
+        .topic-desc {
+            color: #666;
+            line-height: 1.5;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .topic-hint {
+            position: absolute;
+            bottom: 100%;
+            left: 0;
+            right: 0;
+            background: #2c3e50;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            line-height: 1.5;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s;
+            pointer-events: auto;
+            max-height: 350px;
+            overflow-y: auto;
+            z-index: 100;
+            margin-bottom: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            user-select: text;
+        }
+
+        .topic-hint::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 20px;
+            border: 6px solid transparent;
+            border-top-color: #2c3e50;
+        }
+
+        .topic-card:hover .topic-hint {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .hint-title {
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #667eea;
+            padding-right: 25px;
+        }
+
+        .hint-snippets {
+            font-size: 11px;
+            opacity: 0.95;
+        }
+
+        .hint-snippet {
+            padding: 3px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .hint-snippet:last-child {
+            border-bottom: none;
+        }
+
+        @media (max-width: 768px) {
+            .top-section { grid-template-columns: 1fr; }
+            .topics-grid { grid-template-columns: 1fr; }
+            .topic-hint {
+                position: static;
+                opacity: 1;
+                visibility: visible;
+                margin-top: 8px;
+                background: #f8f9fa;
+                color: #333;
+            }
+            .topic-hint::after { display: none; }
+        }
+
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+        }
+
+        .insight-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        .insight-type {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-bottom: 8px;
+        }
+
+        .insight-content {
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+        }
+
+        .resource-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s;
+        }
+
+        .resource-card:hover {
+            background: #e8ebf7;
+            transform: translateX(5px);
+        }
+
+        .resource-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .resource-desc {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+
+        .resource-link {
+            color: #667eea;
+            text-decoration: none;
+            word-break: break-all;
+            font-size: 13px;
+        }
+
+        .resource-link:hover {
+            text-decoration: underline;
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            padding: 20px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="top-section">
+            <div class="header-card">
+                <h1 class="header-title">Pickle Fight Club🥒每日情报</h1>
+                <div class="header-date">2026-01-15</div>
+                <div class="header-source">
+                    <span>📊</span>
+                    <span>数据来源: Pickle Fight Club</span>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">活跃度概览</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">2390</div>
+                        <div class="stat-label">总消息数</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">116</div>
+                        <div class="stat-label">活跃用户</div>
+                    </div>
+                </div>
+                <div class="key-moments">今日群组共产生 2390 条消息，116 位用户参与讨论。讨论热点包括：哈哈哈哈, 哈哈, 猫老师牛, 山野万里, 哈哈哈, 你是我藏, 在微风里, 的欢喜, 猫老师, 猫家军保。</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">🔥 核心热点话题</h2>
+            <div class="topics-grid">
+        <div class="topic-card">
+            <div class="topic-header">
+                <span class="topic-category category-tech">技术实战</span>
+                <div class="topic-title">哈哈哈哈相关讨论</div>
+                <div class="topic-desc">群友围绕【哈哈哈哈】展开了热烈讨论，共有 12 条相关消息。</div>
+            </div>
+            <div class="topic-hint">
+                <div class="hint-title">💬 聊天记录</div>
+                <div class="hint-snippets"><div class="hint-snippet">Crypto李Trading: 哈哈哈哈</div><div class="hint-snippet">Pickle Cat: 哈哈哈哈哈哈</div><div class="hint-snippet">Pickle Cat: 哈哈哈哈哈</div><div class="hint-snippet">Wood Garcia: 猫老师 大概什么时候差不多可以止盈了？哈哈哈哈哈</div><div class="hint-snippet">Crypto李Trading: 哈哈哈哈哈哈</div><div class="hint-snippet">Wood Garcia: 哈哈哈哈哈</div><div class="hint-snippet">Wood Garcia: 哈哈哈哈哈 好的 谢谢猫老师</div><div class="hint-snippet">Pickle Cat: 万一能130k呢哈哈哈哈</div><div class="hint-snippet">大风吹来BNB -L: 哈哈哈哈哈哈哈我要爆火了</div><div class="hint-snippet">wubai【乌龟资本（无资版）—凯特集团亚太分部】: 哈哈哈哈哈哈哈</div><div class="hint-snippet">大风吹来BNB -L: 名字叫L啊没有头像哈哈哈哈哈</div><div class="hint-snippet">Crypto李Trading: 哈哈哈哈哈哈哈哈</div></div>
+            </div>
+        </div>
+        
+        <div class="topic-card">
+            <div class="topic-header">
+                <span class="topic-category category-community">社群动态</span>
+                <div class="topic-title">哈哈相关讨论</div>
+                <div class="topic-desc">群友围绕【哈哈】展开了热烈讨论，共有 12 条相关消息。</div>
+            </div>
+            <div class="topic-hint">
+                <div class="hint-title">💬 聊天记录</div>
+                <div class="hint-snippets"><div class="hint-snippet">Crypto李Trading: 哈哈哈哈</div><div class="hint-snippet">Pickle Cat: 哈哈哈哈哈哈</div><div class="hint-snippet">Pickle Cat: 哈哈哈哈哈</div><div class="hint-snippet">.: 数额太大了哈哈哈</div><div class="hint-snippet">葱王: 哈哈哈</div><div class="hint-snippet">Wood Garcia: 猫老师 大概什么时候差不多可以止盈了？哈哈哈哈哈</div><div class="hint-snippet">Crypto李Trading: 哈哈哈哈哈哈</div><div class="hint-snippet">Wood Garcia: 哈哈哈哈哈</div><div class="hint-snippet">Wood Garcia: 哈哈哈哈哈 好的 谢谢猫老师</div><div class="hint-snippet">Pickle Cat: 万一能130k呢哈哈哈哈</div><div class="hint-snippet">大风吹来BNB -L: 哈哈哈哈哈哈哈我要爆火了</div><div class="hint-snippet">wubai【乌龟资本（无资版）—凯特集团亚太分部】: 哈哈哈哈哈哈哈</div></div>
+            </div>
+        </div>
+        
+        <div class="topic-card">
+            <div class="topic-header">
+                <span class="topic-category category-market">市场分析</span>
+                <div class="topic-title">猫老师牛相关讨论</div>
+                <div class="topic-desc">群友围绕【猫老师牛】展开了热烈讨论，共有 8 条相关消息。</div>
+            </div>
+            <div class="topic-hint">
+                <div class="hint-title">💬 聊天记录</div>
+                <div class="hint-snippets"><div class="hint-snippet">Rick (Never DM first): 猫老师牛逼！</div><div class="hint-snippet">Xi 【企鹅资本(无资版)】: 猫老师牛逼！</div><div class="hint-snippet">Bush Hideon: 猫老师牛逼！</div><div class="hint-snippet">薪王 ☀️ 化身【太阳资本（无资版）】_用时间换空间: 猫老师牛逼！</div><div class="hint-snippet">回本龙【会跟资本】: 猫老师牛逼！</div><div class="hint-snippet">wubai【乌龟资本（无资版）—凯特集团亚太分部】: 猫老师牛逼！猫老师牛逼！猫老师牛逼！猫老师牛逼！猫老师牛逼！</div><div class="hint-snippet">回本龙【会跟资本】: 猫老师牛逼！猫老师牛逼！猫老师牛逼！猫老师牛逼！猫老师牛逼！</div><div class="hint-snippet">金猴熙 Jin: 猫老师牛逼！猫老师牛逼！猫老师牛逼！猫老师牛逼！猫老师牛逼！</div></div>
+            </div>
+        </div>
+        
+        <div class="topic-card">
+            <div class="topic-header">
+                <span class="topic-category category-invest">投资观点</span>
+                <div class="topic-title">山野万里相关讨论</div>
+                <div class="topic-desc">群友围绕【山野万里】展开了热烈讨论，共有 11 条相关消息。</div>
+            </div>
+            <div class="topic-hint">
+                <div class="hint-title">💬 聊天记录</div>
+                <div class="hint-snippets"><div class="hint-snippet">Flo Cowee（Shrimp Researcher）: 我觉得今天那个山野万里就是特地搞的节目效果开盘。。。</div><div class="hint-snippet">Eugene Cat-会跟会跟再慧根: 山野万里你是我藏在微风里的欢喜❤️山野万里你是我藏在微风里的欢喜❤️山野万里你是我藏在微风里的欢喜❤️山野万里你是我藏在微风里的欢喜❤️</div><div class="hint-snippet">薪王 ☀️ 化身【太阳资本（无资版）】_用时间换空间: 山野万里你是我藏在微风里的欢喜❤️山野万里你是我藏在微风里的欢喜❤️山野万里你是我藏在微风里的欢喜❤️山野万里你是我藏在微风里的欢喜❤️</div><div class="hint-snippet">Eugene Cat-会跟会跟再慧根: 山野万里 你是我藏在微风里的欢喜</div><div class="hint-snippet">凱 陳: 山野万里你是我藏在微风里的欢喜❤️山野万里你是我藏在微风里的欢喜❤️山野万里你是我藏在微风里的欢喜❤️山野万里你是我藏在微风里的欢喜❤️</div><div class="hint-snippet">Eugene Cat-会跟会跟再慧根: 山野万里 你是我藏在微风里的欢喜</div><div class="hint-snippet">mark: 山野万里 你是我藏在微风里的欢喜</div><div class="hint-snippet">Burner Banana: 山野万里 你是我藏在微风里的欢喜</div><div class="hint-snippet">回本龙【会跟资本】: 山野万里 你是我藏在微风里的欢喜</div><div class="hint-snippet">邈: 山野万里 cz今晚梦里等你</div><div class="hint-snippet">回本龙【会跟资本】: 山野万里 cz今晚梦里等你</div></div>
+            </div>
+        </div>
+        
+        <div class="topic-card">
+            <div class="topic-header">
+                <span class="topic-category category-achievement">成果展示</span>
+                <div class="topic-title">哈哈哈相关讨论</div>
+                <div class="topic-desc">群友围绕【哈哈哈】展开了热烈讨论，共有 12 条相关消息。</div>
+            </div>
+            <div class="topic-hint">
+                <div class="hint-title">💬 聊天记录</div>
+                <div class="hint-snippets"><div class="hint-snippet">Crypto李Trading: 哈哈哈哈</div><div class="hint-snippet">Pickle Cat: 哈哈哈哈哈哈</div><div class="hint-snippet">Pickle Cat: 哈哈哈哈哈</div><div class="hint-snippet">.: 数额太大了哈哈哈</div><div class="hint-snippet">葱王: 哈哈哈</div><div class="hint-snippet">Wood Garcia: 猫老师 大概什么时候差不多可以止盈了？哈哈哈哈哈</div><div class="hint-snippet">Crypto李Trading: 哈哈哈哈哈哈</div><div class="hint-snippet">Wood Garcia: 哈哈哈哈哈</div><div class="hint-snippet">Wood Garcia: 哈哈哈哈哈 好的 谢谢猫老师</div><div class="hint-snippet">Pickle Cat: 万一能130k呢哈哈哈哈</div><div class="hint-snippet">大风吹来BNB -L: 哈哈哈哈哈哈哈我要爆火了</div><div class="hint-snippet">wubai【乌龟资本（无资版）—凯特集团亚太分部】: 哈哈哈哈哈哈哈</div></div>
+            </div>
+        </div>
+        
+        <div class="topic-card">
+            <div class="topic-header">
+                <span class="topic-category category-tech">技术实战</span>
+                <div class="topic-title">你是我藏相关讨论</div>
+                <div class="topic-desc">群友围绕【你是我藏】展开了热烈讨论，共有 8 条相关消息。</div>
+            </div>
+            <div class="topic-hint">
+                <div class="hint-title">💬 聊天记录</div>
+                <div class="hint-snippets"><div class="hint-snippet">Eugene Cat-会跟会跟再慧根: 山野万里你是我藏在微风里的欢喜❤️山野万里你是我藏在微风里的欢喜❤️山野万里你是我藏在微风里的欢喜❤️山野万里你是我藏在微风里的欢喜❤️</div><div class="hint-snippet">薪王 ☀️ 化身【太阳资本（无资版）】_用时间换空间: 山野万里你是我藏在微风里的欢喜❤️山野万里你是我藏在微风里的欢喜❤️山野万里你是我藏在微风里的欢喜❤️山野万里你是我藏在微风里的欢喜❤️</div><div class="hint-snippet">Eugene Cat-会跟会跟再慧根: 山野万里 你是我藏在微风里的欢喜</div><div class="hint-snippet">凱 陳: 山野万里你是我藏在微风里的欢喜❤️山野万里你是我藏在微风里的欢喜❤️山野万里你是我藏在微风里的欢喜❤️山野万里你是我藏在微风里的欢喜❤️</div><div class="hint-snippet">Eugene Cat-会跟会跟再慧根: 山野万里 你是我藏在微风里的欢喜</div><div class="hint-snippet">mark: 山野万里 你是我藏在微风里的欢喜</div><div class="hint-snippet">Burner Banana: 山野万里 你是我藏在微风里的欢喜</div><div class="hint-snippet">回本龙【会跟资本】: 山野万里 你是我藏在微风里的欢喜</div></div>
+            </div>
+        </div>
+        
+        <div class="topic-card">
+            <div class="topic-header">
+                <span class="topic-category category-community">社群动态</span>
+                <div class="topic-title">在微风里相关讨论</div>
+                <div class="topic-desc">群友围绕【在微风里】展开了热烈讨论，共有 8 条相关消息。</div>
+            </div>
+            <div class="topic-hint">
+                <div class="hint-title">💬 聊天记录</div>
+                <div class="hint-snippets"><div class="hint-snippet">Eugene Cat-会跟会跟再慧根: 山野万里你是我藏在微风里的欢喜❤️山野万里你是我藏在微风里的欢喜❤️山野万里你是我藏在微风里的欢喜❤️山野万里你是我藏在微风里的欢喜❤️</div><div class="hint-snippet">薪王 ☀️ 化身【太阳资本（无资版）】_用时间换空间: 山野万里你是我藏在微风里的欢喜❤️山野万里你是我藏在微风里的欢喜❤️山野万里你是我藏在微风里的欢喜❤️山野万里你是我藏在微风里的欢喜❤️</div><div class="hint-snippet">Eugene Cat-会跟会跟再慧根: 山野万里 你是我藏在微风里的欢喜</div><div class="hint-snippet">凱 陳: 山野万里你是我藏在微风里的欢喜❤️山野万里你是我藏在微风里的欢喜❤️山野万里你是我藏在微风里的欢喜❤️山野万里你是我藏在微风里的欢喜❤️</div><div class="hint-snippet">Eugene Cat-会跟会跟再慧根: 山野万里 你是我藏在微风里的欢喜</div><div class="hint-snippet">mark: 山野万里 你是我藏在微风里的欢喜</div><div class="hint-snippet">Burner Banana: 山野万里 你是我藏在微风里的欢喜</div><div class="hint-snippet">回本龙【会跟资本】: 山野万里 你是我藏在微风里的欢喜</div></div>
+            </div>
+        </div>
+        
+        <div class="topic-card">
+            <div class="topic-header">
+                <span class="topic-category category-market">市场分析</span>
+                <div class="topic-title">的欢喜相关讨论</div>
+                <div class="topic-desc">群友围绕【的欢喜】展开了热烈讨论，共有 8 条相关消息。</div>
+            </div>
+            <div class="topic-hint">
+                <div class="hint-title">💬 聊天记录</div>
+                <div class="hint-snippets"><div class="hint-snippet">Eugene Cat-会跟会跟再慧根: 山野万里你是我藏在微风里的欢喜❤️山野万里你是我藏在微风里的欢喜❤️山野万里你是我藏在微风里的欢喜❤️山野万里你是我藏在微风里的欢喜❤️</div><div class="hint-snippet">薪王 ☀️ 化身【太阳资本（无资版）】_用时间换空间: 山野万里你是我藏在微风里的欢喜❤️山野万里你是我藏在微风里的欢喜❤️山野万里你是我藏在微风里的欢喜❤️山野万里你是我藏在微风里的欢喜❤️</div><div class="hint-snippet">Eugene Cat-会跟会跟再慧根: 山野万里 你是我藏在微风里的欢喜</div><div class="hint-snippet">凱 陳: 山野万里你是我藏在微风里的欢喜❤️山野万里你是我藏在微风里的欢喜❤️山野万里你是我藏在微风里的欢喜❤️山野万里你是我藏在微风里的欢喜❤️</div><div class="hint-snippet">Eugene Cat-会跟会跟再慧根: 山野万里 你是我藏在微风里的欢喜</div><div class="hint-snippet">mark: 山野万里 你是我藏在微风里的欢喜</div><div class="hint-snippet">Burner Banana: 山野万里 你是我藏在微风里的欢喜</div><div class="hint-snippet">回本龙【会跟资本】: 山野万里 你是我藏在微风里的欢喜</div></div>
+            </div>
+        </div>
+        </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">💡 深度洞察</h2>
+            <div class="insights-grid"><div class="insight-card"><div class="insight-type">活跃度</div><div class="insight-content">最活跃的用户：[('大风吹来BNB -L', 265), ('wubai【乌龟资本（无资版）—凯特集团亚太分部】', 193), ('回本龙【会跟资本】', 186), ('土豆🥔赚 【稳稳的幸福版】', 170), ('蜻蜓かわ いいの', 153)]</div></div><div class="insight-card"><div class="insight-type">参与度</div><div class="insight-content">平均每人发送 20 条消息</div></div></div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">🔗 资源与工具分享</h2>
+            <div class="resource-grid"></div>
+        </div>
+
+        <div class="footer">
+            <p>🤖 AI 生成 | 2026-01-15</p>
+        </div>
+    </div>
+</body>
+</html>
