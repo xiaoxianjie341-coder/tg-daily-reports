@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pickle Fight Club🥒每日情报</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .top-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .header-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .header-title {
+            font-size: 32px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
+        }
+
+        .header-date {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .header-source {
+            font-size: 14px;
+            color: #999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .section {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 5px;
+            height: 28px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 3px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .key-moments {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            line-height: 1.8;
+            color: #555;
+        }
+
+        .topics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 12px;
+        }
+
+        .topic-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 12px;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .topic-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+            z-index: 10;
+        }
+
+        .topic-header {
+            margin-bottom: 8px;
+        }
+
+        .topic-category {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .category-tech { background: #e3f2fd; color: #1976d2; }
+        .category-community { background: #f3e5f5; color: #7b1fa2; }
+        .category-achievement { background: #e8f5e9; color: #388e3c; }
+        .category-market { background: #fff3e0; color: #f57c00; }
+        .category-invest { background: #fce4ec; color: #c2185b; }
+
+        .topic-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 6px;
+            line-height: 1.3;
+        }
+
+        .topic-desc {
+            color: #666;
+            line-height: 1.5;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        /* 悬停提示 */
+        .topic-hint {
+            position: absolute;
+            bottom: 100%;
+            left: 0;
+            right: 0;
+            background: #2c3e50;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            line-height: 1.5;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s;
+            pointer-events: auto;
+            max-height: 350px;
+            overflow-y: auto;
+            z-index: 100;
+            margin-bottom: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            user-select: text;
+        }
+
+        .topic-hint::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 20px;
+            border: 6px solid transparent;
+            border-top-color: #2c3e50;
+        }
+
+        .topic-card:hover .topic-hint {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .hint-title {
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #667eea;
+            padding-right: 25px;
+        }
+
+        .hint-snippets {
+            font-size: 11px;
+            opacity: 0.95;
+        }
+
+        .hint-snippet {
+            padding: 3px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .hint-snippet:last-child {
+            border-bottom: none;
+        }
+
+        @media (max-width: 768px) {
+            .top-section { grid-template-columns: 1fr; }
+            .topics-grid { grid-template-columns: 1fr; }
+            .topic-hint {
+                position: static;
+                opacity: 1;
+                visibility: visible;
+                margin-top: 8px;
+                background: #f8f9fa;
+                color: #333;
+            }
+            .topic-hint::after { display: none; }
+        }
+
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+        }
+
+        .insight-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        .insight-type {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-bottom: 8px;
+        }
+
+        .insight-content {
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+        }
+
+        .resource-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s;
+        }
+
+        .resource-card:hover {
+            background: #e8ebf7;
+            transform: translateX(5px);
+        }
+
+        .resource-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .resource-desc {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+
+        .resource-link {
+            color: #667eea;
+            text-decoration: none;
+            word-break: break-all;
+            font-size: 13px;
+        }
+
+        .resource-link:hover {
+            text-decoration: underline;
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            padding: 20px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="top-section">
+            <div class="header-card">
+                <h1 class="header-title">Pickle Fight Club🥒每日情报</h1>
+                <div class="header-date">01月22日</div>
+                <div class="header-source">
+                    <span>📊</span>
+                    <span>数据来源: Pickle Fight Club</span>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">活跃度概览</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">2544</div>
+                        <div class="stat-label">总消息数</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">117</div>
+                        <div class="stat-label">活跃用户</div>
+                    </div>
+                </div>
+                <div class="key-moments">社群围绕猫老师（Pickle Cat）的OKX官方访谈展开热烈讨论，群友集体在B站及X平台刷屏支持。市场方面，BTC与ETH经历剧烈震荡（画门），引发多空激烈博弈，群内出现'病根在BTC'的梗。社群运营上，积分系统与'猫济会'称号成为活跃焦点，同时群友自发组织反击针对猫老师的网络谣言。此外，叶哥（大风吹来BNB）因Meme暴富成为群内焦点，引发FOMO情绪。</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">🔥 核心热点话题</h2>
+            <div class="topics-grid">
+        <div class="topic-card">
+            <div class="topic-header">
+                <span class="topic-category category-community">社群动态</span>
+                <div class="topic-title">猫老师OKX访谈发布与猫家军出征</div>
+                <div class="topic-desc">猫老师接受OKX官方访谈的视频在B站和X平台发布，群友（猫家军）积极响应，集体在评论区刷屏、点赞和转发，以增加热度。大家讨论访谈内容，称赞猫老师的真实与可爱，并对外界的质疑声音进行反击。</div>
+            </div>
+            <div class="topic-hint">
+                <div class="hint-title">💬 聊天记录</div>
+                <div class="hint-snippets"><div class="hint-snippet">Pickle Cat: okx发了</div><div class="hint-snippet">Adrian: 开始恶补猫老师的视频了</div><div class="hint-snippet">微 光: 最后一个字是什么</div><div class="hint-snippet">Pickle Capybara: https://x.com/mia_okx/status/2013932517003550763?s=46</div><div class="hint-snippet">无尽夏: https://x.com/0xpicklecati/status/2013934553878929780?s=46</div><div class="hint-snippet">白乌鸦: 冲冲冲冲冲冲</div><div class="hint-snippet">Pickle Capybara: 冲冲冲</div><div class="hint-snippet">Pickle Cat: 爱大家</div><div class="hint-snippet">薪王 ☀️ 化身【太阳资本（无资版）】最最最最最最最最最最最最长的名字能有多长: 冲了</div><div class="hint-snippet">回本龙【会跟资本】: 三连了</div><div class="hint-snippet">Pickle Capybara: 黄瓜猫发b站啦！！</div><div class="hint-snippet">Steve L (No alt-coins): 哇是猫老师的访谈</div><div class="hint-snippet">Pickle Capybara: 全部纳入后宫！</div><div class="hint-snippet">Steve L (No alt-coins): 大家都去看呀</div><div class="hint-snippet">Flo Cowee（Shrimp Researcher）: 我今天还在想啥时候更新采访</div></div>
+            </div>
+        </div>
+        
+        <div class="topic-card">
+            <div class="topic-header">
+                <span class="topic-category category-market">市场分析</span>
+                <div class="topic-title">BTC/ETH剧烈震荡与'画门'行情</div>
+                <div class="topic-desc">大盘出现剧烈波动，BTC和ETH价格快速下跌又反弹（画门）。群友讨论关键支撑位（如87500、82k），分析多空博弈，并调侃'空军小乐一会'。猫老师指出短期走势难以判断，中期看涨。</div>
+            </div>
+            <div class="topic-hint">
+                <div class="hint-title">💬 聊天记录</div>
+                <div class="hint-snippets"><div class="hint-snippet">wubai【海盗加菲猫-抢抢抢】: 粉红豹 遥遥领先</div><div class="hint-snippet">Xi 【企鹅资本(无资版)】: eth 也太能跌了吧</div><div class="hint-snippet">美少女壮士Alita💥: 猫老师指明趋势大方向了</div><div class="hint-snippet">Xi 【企鹅资本(无资版)】: 猫老师指明趋势大方向了</div><div class="hint-snippet">回本龙【会跟资本】: 猫老师指明趋势大方向了</div><div class="hint-snippet">wubai【海盗加菲猫-抢抢抢】: 乌龟资本会默默等它涨回来的</div><div class="hint-snippet">Justin ccc [JC資本（負資版）]: 貓老師，想你的心，如流水般，連綿不斷，我的心願意為貓媽媽瘋狂跳動</div><div class="hint-snippet">回本龙【会跟资本】: 和平委员会</div><div class="hint-snippet">Xi 【企鹅资本(无资版)】: 这个频道不错</div><div class="hint-snippet">Zijie Wang: 猫老师指明趋势大方向了</div><div class="hint-snippet">寻｜halo: 12岁入场、25岁3亿，00后Pickle Cat怎么做到的？OKX访谈文字版！大家有V信，去帮点个赞哈！https://mp.weixin.qq.com/s/-Fkv64aNOLIpv7d_zyBG1Q</div><div class="hint-snippet">Zijie Wang: 貓老師，想你的心，如流水般，連綿不斷，我的心願意為貓媽媽瘋狂跳動</div><div class="hint-snippet">美少女壮士Alita💥: 开始画门了又</div><div class="hint-snippet">凱 陳: eth 也太能跌了吧</div><div class="hint-snippet">k kk: 跌跌不休</div></div>
+            </div>
+        </div>
+        
+        <div class="topic-card">
+            <div class="topic-header">
+                <span class="topic-category category-community">社群动态</span>
+                <div class="topic-title">叶哥Meme暴富与群内FOMO</div>
+                <div class="topic-desc">群友大风吹来BNB（叶哥）声称通过Meme币在两小时内实现财富自由，引发群内轰动和大量FOMO情绪。大家纷纷询问地址、表达羡慕，并调侃'看来和叶哥关系不够好'，成为当日热门话题。</div>
+            </div>
+            <div class="topic-hint">
+                <div class="hint-title">💬 聊天记录</div>
+                <div class="hint-snippets"><div class="hint-snippet">大风吹来BNB -L: 我的分</div><div class="hint-snippet">Pickle Capybara: 极速逮捕</div><div class="hint-snippet">大风吹来BNB -L: 全部送给大家吧</div><div class="hint-snippet">尖叫: 打扰大家了</div><div class="hint-snippet">杨九1号 小橘虎版: 打扰大家了，我上班累的不行了，麻烦大家给我转点钱回家过年，不是借，是要，不还的。我看大家赚钱都那么容易，才开口的。</div><div class="hint-snippet">大风吹来BNB -L: 我准备退群了</div><div class="hint-snippet">Crypto Banana: 对，我想搞个香蕉的</div><div class="hint-snippet">尖叫: 我上班累的不行了</div><div class="hint-snippet">杨九1号 小橘虎版: ？</div><div class="hint-snippet">Pickle Capybara: 去积分商城兑换吧！</div><div class="hint-snippet">Xi 【企鹅资本(无资版)】: ？</div><div class="hint-snippet">Pickle Capybara: ？</div><div class="hint-snippet">尖叫: 麻烦大家给我转点钱回家过年</div><div class="hint-snippet">杨九1号 小橘虎版: 真的假的</div><div class="hint-snippet">微 光: ?</div></div>
+            </div>
+        </div>
+        
+        <div class="topic-card">
+            <div class="topic-header">
+                <span class="topic-category category-community">社群动态</span>
+                <div class="topic-title">积分系统、拍卖与'猫济会'称号</div>
+                <div class="topic-desc">群内积分系统活跃，用户查询积分排名，竞拍头像（如向日葵头像）。群友戏称建立'猫济会'，并讨论各种职位（如大长老、门卫），显示出极高的社群凝聚力和归属感。</div>
+            </div>
+            <div class="topic-hint">
+                <div class="hint-title">💬 聊天记录</div>
+                <div class="hint-snippets"><div class="hint-snippet">Eugene Cat-会跟会跟再慧根: 说点大家不缺的</div><div class="hint-snippet">回本龙【会跟资本】: 还是旅游度假</div><div class="hint-snippet">猫猫Bot【积分任务】: 拍卖标题: 黄瓜家族头像-向日葵拍卖编号:PM1768970690782拍卖状态:进行中截止时间:2026/01/21 23:55:00起拍积分: 10积分加价幅度: 10积分用你的出价回复本消息，即可参与。在临近截止时间出价，截止时间会顺延1分钟请勿恶意竞价！！请勿恶意竞价！！出价记录 (8)🏆610薪王 ☀️化身【太阳资本（无资版）】最最最最最最最最最最最最长的名字能有多长01月21日 15:21:08出局600Roy01月21日 15:02:55出局500wubai【海盗加菲猫-抢抢抢】01月21日 14:39:48出局430Xi【企鹅资本(无资版)】01月21日 14:37:40出局410DonaldLee01月21日 14:37:21出局400wubai【海盗加菲猫-抢抢抢】01月21日 14:07:47出局310邈01月21日 12:49:34出局300Eugene Cat-会跟会跟再慧根01月21日 12:45:03</div><div class="hint-snippet">白乌鸦: 不是同年同日富吗</div><div class="hint-snippet">回本龙【会跟资本】: 650</div><div class="hint-snippet">薪王 ☀️ 化身【太阳资本（无资版）】最最最最最最最最最最最最长的名字能有多长: 草～～～～～～</div><div class="hint-snippet">Adrian: 旅游</div><div class="hint-snippet">猫猫Bot【积分任务】: 黄瓜家族定制手绘头像黄瓜家族听说来了新人?数量:27已兑换148所需积分:600</div><div class="hint-snippet">回本龙【会跟资本】: 她天天玩植物大战僵尸</div><div class="hint-snippet">尖叫: 出价1000</div><div class="hint-snippet">微 光: ？</div><div class="hint-snippet">尖叫: 出价1200</div><div class="hint-snippet">Adrian: 真的我记得我有个头像被富贵哥偷塔了</div><div class="hint-snippet">尖叫: 出价1500</div><div class="hint-snippet">scassy: 哄抬😀</div></div>
+            </div>
+        </div>
+        
+        <div class="topic-card">
+            <div class="topic-header">
+                <span class="topic-category category-invest">投资观点</span>
+                <div class="topic-title">猫老师实盘关闭与市场信仰</div>
+                <div class="topic-desc">针对猫老师关闭实盘的讨论，群友表示理解并认为这是为了保护隐私或避免干扰。大家表达了对猫老师交易能力的信任，认为其'赚的是真钱'，并讨论了'大钱靠信仰'的投资理念。</div>
+            </div>
+            <div class="topic-hint">
+                <div class="hint-title">💬 聊天记录</div>
+                <div class="hint-snippets"><div class="hint-snippet">_7oey Zoey: 猫老师的实盘看不到了嘛</div><div class="hint-snippet">Crypto Banana: 猫来了，我想问猫老师为啥把实盘关了呢</div><div class="hint-snippet">白乌鸦: 好好好必须好</div><div class="hint-snippet">Crypto Banana: 中间出于啥考虑</div><div class="hint-snippet">凱 陳: 難怪你每天都會被cb哥提審</div><div class="hint-snippet">Pickle Capybara: 猫军冲锋！</div><div class="hint-snippet">Adrian: 开始恶补猫老师的视频了</div><div class="hint-snippet">微 光: 最后一个字是什么</div><div class="hint-snippet">薪王 ☀️ 化身【太阳资本（无资版）】最最最最最最最最最最最最长的名字能有多长: 链接在哪，没找到</div><div class="hint-snippet">凱 陳: 審判啊</div><div class="hint-snippet">Pickle Capybara: https://x.com/mia_okx/status/2013932517003550763?s=46</div><div class="hint-snippet">无尽夏: https://x.com/0xpicklecati/status/2013934553878929780?s=46</div><div class="hint-snippet">白乌鸦: 冲冲冲冲冲冲</div><div class="hint-snippet">Pickle Capybara: 冲冲冲</div><div class="hint-snippet">微 光: 审？</div></div>
+            </div>
+        </div>
+        
+        <div class="topic-card">
+            <div class="topic-header">
+                <span class="topic-category category-community">社群动态</span>
+                <div class="topic-title">反击网络谣言与维护猫老师声誉</div>
+                <div class="topic-desc">针对B站和X平台上出现的针对猫老师的负面评论和谣言（如利用猫老师名义引流），群友表现出极强的团结性，自发组织去评论区'出征'、举报和反驳，维护社群偶像的声誉。</div>
+            </div>
+            <div class="topic-hint">
+                <div class="hint-title">💬 聊天记录</div>
+                <div class="hint-snippets"><div class="hint-snippet">cdsdwer: b站评论不是很友善啊</div><div class="hint-snippet">Roy: 好</div><div class="hint-snippet">cdsdwer: 亏损图那个，其实我想说猫老师可以不放出来但是猫老师主打真实</div><div class="hint-snippet">cdsdwer: 拿猫老师自己亏得图试图打猫老师的脸</div><div class="hint-snippet">Crypto李Trading: 我们就是喜欢猫老师的真实</div><div class="hint-snippet">cdsdwer: 多少有点毛病</div><div class="hint-snippet">Flo Cowee（Shrimp Researcher）: 单独拿出来亏损的那张图</div><div class="hint-snippet">cdsdwer: 外面那么多永赚博主呢</div><div class="hint-snippet">𝑨𝒓𝒄𝒉𝒂𝒊𝒐𝒏 𝑷𝒏𝒆𝒖𝒎𝒂 ₿: 外面那么多永赚博主呢</div><div class="hint-snippet">didi didi: 这又是什么品种的傻逼</div><div class="hint-snippet">白乌鸦: 我来骂</div><div class="hint-snippet">Flo Cowee（Shrimp Researcher）: 冲冲冲</div><div class="hint-snippet">wubai【海盗加菲猫-抢抢抢】: 嘴强王者flo，喷王</div><div class="hint-snippet">Pickle Capybara: 这个真的唐婉了</div><div class="hint-snippet">Pickle Capybara: 把他介绍给永赚博主</div></div>
+            </div>
+        </div>
+        
+        <div class="topic-card">
+            <div class="topic-header">
+                <span class="topic-category category-tech">技术实战</span>
+                <div class="topic-title">交易策略与点位分析</div>
+                <div class="topic-desc">群内资深交易员（如企鹅资本）分享具体的交易点位和策略，如ETH在2800/2780抄底，讨论订单簿、止损位等技术细节。同时也有关于马丁战法、浮盈加仓等风险策略的讨论。</div>
+            </div>
+            <div class="topic-hint">
+                <div class="hint-title">💬 聊天记录</div>
+                <div class="hint-snippets"><div class="hint-snippet">回本龙【会跟资本】: 大饼跌的没人说了吗</div><div class="hint-snippet">凱 陳: 這麼多人在說話</div><div class="hint-snippet">大风吹来BNB -L: 今晚估计还要跌一下吧</div><div class="hint-snippet">凱 陳: 我一直在加倉</div><div class="hint-snippet">大风吹来BNB -L: 不能随便加仓</div><div class="hint-snippet">凱 陳: 跌100點加一次</div><div class="hint-snippet">x: 浮盈加仓</div><div class="hint-snippet">凱 陳: 加最低倉位</div><div class="hint-snippet">x: 涨赚不了多少，跌全得扛着的马丁战法</div><div class="hint-snippet">Crypto Banana: 重仓猛干，浮盈加仓？</div><div class="hint-snippet">k kk: 技术分析</div><div class="hint-snippet">Crypto Banana: 早晚的事</div><div class="hint-snippet">k kk: 迟早美好</div><div class="hint-snippet">回本龙【会跟资本】: 抄猫老师的底</div><div class="hint-snippet">Pickle Capybara: 解谜是常驻的！！</div></div>
+            </div>
+        </div>
+        
+        <div class="topic-card">
+            <div class="topic-header">
+                <span class="topic-category category-community">社群动态</span>
+                <div class="topic-title">群内梗文化与'黄瓜猫'乱叫</div>
+                <div class="topic-desc">社群衍生出独特的梗文化，如'病根在BTC'、'黄瓜猫乱叫'等。群友在访谈发布后集体在群里刷屏'啊啊啊'（模仿猫叫），展现出一种疯狂、幽默且独特的社群氛围。</div>
+            </div>
+            <div class="topic-hint">
+                <div class="hint-title">💬 聊天记录</div>
+                <div class="hint-snippets"><div class="hint-snippet">尖叫: 我感觉我的病根在BTC，他涨了我的病就好了</div><div class="hint-snippet">尖叫: 我感觉我的病根在ETH，他涨了我的病就好了</div><div class="hint-snippet">Adrian: 芜湖</div><div class="hint-snippet">wubai【海盗加菲猫-抢抢抢】: 俺感觉俺的病根在BTC，俺涨了俺的病就好了</div><div class="hint-snippet">Crypto Banana: 起死还魂术</div><div class="hint-snippet">寻｜halo: 文字版来了</div><div class="hint-snippet">Goldchau | DI Foundation: ？？？</div><div class="hint-snippet">wubai【海盗加菲猫-抢抢抢】: 打不开啊</div><div class="hint-snippet">Crypto Banana: 刚才那个语音我点了一下外放社死了已经</div><div class="hint-snippet">wubai【海盗加菲猫-抢抢抢】: 问题不大</div><div class="hint-snippet">寻｜halo: V信的</div><div class="hint-snippet">凱 陳: 多军依然在！</div><div class="hint-snippet">无尽夏: 谢谢您关心</div><div class="hint-snippet">寻｜halo: https://mp.weixin.qq.com/s/-Fkv64aNOLIpv7d_zyBG1Q</div><div class="hint-snippet">x: 推一下v</div></div>
+            </div>
+        </div>
+        
+        <div class="topic-card">
+            <div class="topic-header">
+                <span class="topic-category category-community">社群动态</span>
+                <div class="topic-title">头像定制与社群福利</div>
+                <div class="topic-desc">群友热衷于兑换由卡老师（Pickle Capybara）手绘的定制头像，视为身份象征。讨论涉及兑换流程、积分消耗以及头像的创意（如香蕉猫、武装直升机），显示出社群经济系统的活跃。</div>
+            </div>
+            <div class="topic-hint">
+                <div class="hint-title">💬 聊天记录</div>
+                <div class="hint-snippets"><div class="hint-snippet">Xi 【企鹅资本(无资版)】: 感谢认可啊</div><div class="hint-snippet">Adrian: 冒犯到 请原谅我</div><div class="hint-snippet">Crypto Banana: 群里来了机器人，机器人会被欺负</div><div class="hint-snippet">LCX{₿}¹ | 🏴‍☠️: 机器人聊不出企鹅的水平</div><div class="hint-snippet">Adrian: 让我看看我多少积分了</div><div class="hint-snippet">白乌鸦: 机器人没那么变态</div><div class="hint-snippet">猫猫Bot【积分任务】: 积分榜41Cat Pickle 小迷弟积分:218842DonaldLee积分:218843金猴熙Jin积分:217044ee积分:185045果子学生积分:184946hatereflax🦴积分:180647钱不多的兄弟积分:175348czw积分:167749蜡笔小点心积分:166950ZJ积分:165051makesh积分:161052还是做不到吗积分:160053379积分:154854kobankiller积分:153355RRichard🌲积分:151856吉祥积分:148957龍🐲龍积分:144358Harry积分:139459MonicaViola积分:138860mark积分:1375</div><div class="hint-snippet">薪王 ☀️ 化身【太阳资本（无资版）】最最最最最最最最最最最最长的名字能有多长: 不求同年同月同日生，只求同年同月同日富</div><div class="hint-snippet">Crypto李Trading: 机器人没那么变态</div><div class="hint-snippet">Pickle Capybara: 不求同年同月同日生，只求同年同月同日富</div><div class="hint-snippet">Adrian: 我竟然还在前四十</div><div class="hint-snippet">回本龙【会跟资本】: 不求同年同月同日生，只求同年同月同日富</div><div class="hint-snippet">Adrian: 哈哈哈哈哈哈哈</div><div class="hint-snippet">白乌鸦: 不求同年同月同日生，只求同年同月同日富</div><div class="hint-snippet">回本龙【会跟资本】: 太牛逼了 前排</div></div>
+            </div>
+        </div>
+        
+        <div class="topic-card">
+            <div class="topic-header">
+                <span class="topic-category category-market">市场分析</span>
+                <div class="topic-title">宏观经济与特朗普政策影响</div>
+                <div class="topic-desc">讨论特朗普关于关税和加密货币的言论对市场的影响，以及其对美联储主席的评论。群友认为这些消息是导致市场震荡（画门）的原因之一，并讨论了中美合作对加密市场的潜在影响。</div>
+            </div>
+            <div class="topic-hint">
+                <div class="hint-title">💬 聊天记录</div>
+                <div class="hint-snippets"><div class="hint-snippet">Eggplant: 川普在论坛讲话提加密货币和美联储主席</div><div class="hint-snippet">Donald Lee: 🤣🤣🤣🤣🤣🤣🤣</div><div class="hint-snippet">土豆🥔赚赚赚: 牛回速归冲</div><div class="hint-snippet">寻｜halo: 现在90后，00后，在内地，对历史都是一片空白</div><div class="hint-snippet">Eggplant: 直接说鲍威尔垃圾，哈哈</div><div class="hint-snippet">凱 陳: 利好開始漲</div><div class="hint-snippet">土豆🥔赚赚赚: 这次又是taco?</div><div class="hint-snippet">Bunny Bb: 他又开始了😂</div><div class="hint-snippet">Eggplant: 他要是说句明年多点降息就牛逼了</div><div class="hint-snippet">寻｜halo: 哈哈！的确纳闷</div><div class="hint-snippet">wubai【海盗加菲猫-抢抢抢】: 牛回速归冲</div><div class="hint-snippet">凱 陳: 牛回速归冲</div><div class="hint-snippet">寻｜halo: 很少见日本、台湾的在广州</div><div class="hint-snippet">凱 陳: 上海比較多吧，台灣人</div><div class="hint-snippet">寻｜halo: 那肯定不能比，不过应该跑差𣎴多了</div></div>
+            </div>
+        </div>
+        </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">💡 深度洞察</h2>
+            <div class="insights-grid"><div class="insight-card"><div class="insight-type">趋势</div><div class="insight-content">社群已形成极强的'饭圈'文化，对核心KOL（猫老师）的保护欲和行动力极强，能迅速组织对外舆论反击。</div></div><div class="insight-card"><div class="insight-type">风险</div><div class="insight-content">市场处于极度敏感期，消息面（如特朗普言论）极易引发插针和爆仓，'画门'行情成为常态，杠杆交易风险极高。</div></div><div class="insight-card"><div class="insight-type">机会</div><div class="insight-content">Meme币造富效应（如叶哥案例）在群内引发FOMO，显示出在震荡行情中，散户对高风险高回报投机机会的渴望。</div></div><div class="insight-card"><div class="insight-type">新知</div><div class="insight-content">社群通过积分、拍卖、称号等游戏化机制成功维持了高活跃度和用户粘性，构建了独特的内部经济体系。</div></div></div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">🔗 资源与工具分享</h2>
+            <div class="resource-grid"><div class="resource-card">
+            <div class="resource-name">猫老师OKX访谈视频（B站）</div>
+            <div class="resource-desc">猫老师接受OKX官方访谈的视频，讲述了其从校园打架到赚两亿的经历，是当日社群讨论的核心。</div>
+            <a class="resource-link" href="https://www.bilibili.com/video/BV1d9zVBcEzK/" target="_blank">🔗 查看链接</a>
+        </div><div class="resource-card">
+            <div class="resource-name">猫老师OKX访谈文字版</div>
+            <div class="resource-desc">访谈的文字版内容，方便群友快速阅读和转发。</div>
+            <a class="resource-link" href="https://mp.weixin.qq.com/s/-Fkv64aNOLIpv7d_zyBG1Q" target="_blank">🔗 查看链接</a>
+        </div><div class="resource-card">
+            <div class="resource-name">Mia（OKX VIP经理）推文</div>
+            <div class="resource-desc">OKX VIP经理发布的关于猫老师的推文，群友积极参与评论互动。</div>
+            <a class="resource-link" href="https://x.com/mia_okx/status/2013932517003550763?s=46" target="_blank">🔗 查看链接</a>
+        </div><div class="resource-card">
+            <div class="resource-name">猫老师个人推文</div>
+            <div class="resource-desc">猫老师个人账号发布的访谈相关推文，是猫家军占领评论区的目标。</div>
+            <a class="resource-link" href="https://x.com/0xpicklecati/status/2013934553878929780?s=46" target="_blank">🔗 查看链接</a>
+        </div></div>
+        </div>
+
+        <div class="footer">
+            <p>🤖 AI 生成 | 01月22日</p>
+        </div>
+    </div>
+</body>
+</html>
