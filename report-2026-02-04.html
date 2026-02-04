@@ -8,21 +8,21 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; min-height: 100vh; }
         .container { max-width: 1600px; margin: 0 auto; padding: 0 20px; }
-        .top-section { display: grid; grid-template-columns: 1fr 1fr20px; margin-bottom: 30px; }
-       ; gap:  .header-card { background: white; border-radius: 20px; padding: 30px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); text-align: center; display: flex; flex-direction: column; justify-content: center; }
+        .top-section { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }
+        .header-card { background: white; border-radius: 20px; padding: 30px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); text-align: center; display: flex; flex-direction: column; justify-content: center; }
         .header-title { font-size: 32px; font-weight: 800; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 12px; }
-        .header-date { font-size: 16px; color: #666; margin-bottom: 8px; }
+        .header-date { font-size: 18px; color: #666; margin-bottom: 8px; }
         .header-source { font-size: 14px; color: #999; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .section { background: white; border-radius: 20px; padding: 25px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1); margin-bottom: 20px; }
-        .section-title { font-size: 28px; font-weight: 700; color: #333; margin-bottom: 25px; display: flex; align-items: center; gap: 12px; }
-        .section-title::before { content: ''; width: 5px; height: 28px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 3px; }
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 25px; }
-        .stat-card { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 25px; border-radius: 15px; text-align: center; }
-        .stat-value { font-size: 36px; font-weight: 800; margin-bottom: 8px; }
-        .stat-label { font-size: 14px; opacity: 0.9; }
-        .key-moments { background: #f8f9fa; padding: 20px; border-radius: 12px; line-height: 1.8; color: #555; }
-        .topics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 15px; }
-        .topic-card { background: white; border: 1px solid #e0e0e0; border-radius: 8px; padding: 15px; transition: all 0.2s; position: relative; }
+        .section-title { font-size: 24px; font-weight: 700; color: #333; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+        .section-title::before { content: ''; width: 5px; height: 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 3px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .stat-card { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 15px; text-align: center; }
+        .stat-value { font-size: 32px; font-weight: 800; margin-bottom: 5px; }
+        .stat-label { font-size: 13px; opacity: 0.9; }
+        .key-moments { background: #f8f9fa; padding: 18px; border-radius: 12px; line-height: 1.8; color: #555; font-size: 14px; }
+        .topics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 15px; }
+        .topic-card { background: white; border: 1px solid #e0e0e0; border-radius: 10px; padding: 18px; transition: all 0.2s; position: relative; }
         .topic-card:hover { border-color: #667eea; box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15); z-index: 10; }
         .topic-header { margin-bottom: 10px; }
         .topic-category { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 600; margin-bottom: 8px; }
@@ -30,26 +30,26 @@
         .category-community { background: #f3e5f5; color: #7b1fa2; }
         .category-tech { background: #e3f2fd; color: #1976d2; }
         .category-invest { background: #fce4ec; color: #c2185b; }
-        .topic-title { font-size: 16px; font-weight: 700; color: #333; margin-bottom: 8px; line-height: 1.3; }
+        .topic-title { font-size: 16px; font-weight: 700; color: #333; margin-bottom: 8px; line-height: 1.4; }
         .topic-desc { color: #666; line-height: 1.6; font-size: 13px; margin-bottom: 10px; }
-        .topic-hint { position: absolute; bottom: 100%; left: 0; right: 0; background: #2c3e50; color: white; padding: 15px; border-radius: 8px; font-size: 12px; line-height: 1.6; opacity: 0; visibility: hidden; transition: all 0.2s; pointer-events: auto; max-height: 400px; overflow-y: auto; z-index: 100; margin-bottom: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); user-select: text; }
+        .topic-hint { position: absolute; bottom: 100%; left: 0; right: 0; background: #2c3e50; color: white; padding: 15px; border-radius: 8px; font-size: 12px; line-height: 1.6; opacity: 0; visibility: hidden; transition: all 0.2s; pointer-events: auto; max-height: 350px; overflow-y: auto; z-index: 100; margin-bottom: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); }
         .topic-hint::after { content: ''; position: absolute; top: 100%; left: 20px; border: 6px solid transparent; border-top-color: #2c3e50; }
         .topic-card:hover .topic-hint { opacity: 1; visibility: visible; }
-        .hint-title { font-weight: 600; margin-bottom: 8px; color: #667eea; padding-right: 25px; }
+        .hint-title { font-weight: 600; margin-bottom: 8px; color: #667eea; }
         .hint-snippets { font-size: 11px; opacity: 0.95; }
-        .hint-snippet { padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .hint-snippet { padding: 3px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .hint-snippet:last-child { border-bottom: none; }
         @media (max-width: 768px) { .top-section { grid-template-columns: 1fr; } .topics-grid { grid-template-columns: 1fr; } .topic-hint { position: static; opacity: 1; visibility: visible; margin-top: 10px; background: #f8f9fa; color: #333; } .topic-hint::after { display: none; } }
-        .insights-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
-        .insight-card { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 12px; }
-        .insight-type { font-size: 12px; opacity: 0.8; margin-bottom: 8px; }
+        .insights-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 15px; }
+        .insight-card { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 18px; border-radius: 12px; }
+        .insight-type { font-size: 12px; opacity: 0.8; margin-bottom: 6px; }
         .insight-content { font-size: 14px; line-height: 1.6; }
-        .resource-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
-        .resource-card { background: #f8f9fa; padding: 20px; border-radius: 12px; border-left: 4px solid #667eea; transition: all 0.3s; }
-        .resource-card:hover { background: #e8ebf7; transform: translateX(5px); }
-        .resource-name { font-size: 16px; font-weight: 600; color: #333; margin-bottom: 8px; }
-        .resource-desc { font-size: 14px; color: #666; line-height: 1.6; margin-bottom: 8px; }
-        .resource-link { color: #667eea; text-decoration: none; word-break: break-all; font-size: 13px; }
+        .resource-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 15px; }
+        .resource-card { background: #f8f9fa; padding: 18px; border-radius: 12px; border-left: 4px solid #667eea; transition: all 0.3s; }
+        .resource-card:hover { background: #e8ebf7; transform: translateX(3px); }
+        .resource-name { font-size: 15px; font-weight: 600; color: #333; margin-bottom: 6px; }
+        .resource-desc { font-size: 13px; color: #666; line-height: 1.5; margin-bottom: 8px; }
+        .resource-link { color: #667eea; text-decoration: none; word-break: break-all; font-size: 12px; }
         .resource-link:hover { text-decoration: underline; }
         .footer { text-align: center; color: white; padding: 20px; font-size: 14px; opacity: 0.8; }
     </style>
@@ -59,7 +59,7 @@
         <div class="top-section">
             <div class="header-card">
                 <h1 class="header-title">Pickle Fight Club🥒每日情报</h1>
-                <div class="header-date">02月04日</div>
+                <div class="header-date">2026年02月04日</div>
                 <div class="header-source"><span>📊</span><span>数据来源: Pickle Fight Club</span></div>
             </div>
             <div class="section">
@@ -67,8 +67,9 @@
                 <div class="stats-grid">
                     <div class="stat-card"><div class="stat-value">3,230</div><div class="stat-label">总消息数</div></div>
                     <div class="stat-card"><div class="stat-value">107</div><div class="stat-label">活跃用户</div></div>
+                    <div class="stat-card"><div class="stat-value">8</div><div class="stat-label">核心话题</div></div>
                 </div>
-                <div class="key-moments">市场经历剧烈震荡，加密市场总消息达3,230条，107位用户积极参与讨论。BTC、ETH大幅回调，群友情绪在恐慌与抄底间反复横跳。Hype代币成为讨论焦点，从高点大幅回落引发社群哀嚎。Justin分享其激进交易风格，群友围观"暴富希望"。防诈骗成为重要议题，猫老师紧急发布声明称有人冒充其开设带单服务。黄金白银避险话题升温，群友热议贵金属走势与仓位管理技巧。</div>
+                <div class="key-moments">市场经历剧烈震荡，单日消息量达3,230条，107位用户积极参与讨论。BTC跌破75k、ETH跌幅超SOL，市场恐慌情绪蔓延。Hype代币从高点大幅回落，"麻吉真成hype反指"成为热梗。Justin激进交易风格引围观，群友调侃"暴富就靠你"。猫老师紧急发布防诈骗声明，有人冒充其开设带单服务。黄金白银避险话题升温，上海银价溢价分析引发热议。交易心理学讨论深入，仓位管理与DCA策略成为焦点。</div>
             </div>
         </div>
 
@@ -79,8 +80,8 @@
             <div class="topic-header">
                 <span class="topic-category category-market">市场分析</span>
                 <div class="topic-title">Hype代币大幅回调引发社群热议</div>
-                <div class="topic-desc">Hype代币从历史高点大幅回落，群友纷纷讨论是否应该止损或抄底。"麻吉真成hype反指"成为当日热梗，大家对Hype后续走势看法分化。</div>
             </div>
+            <div class="topic-desc">Hype代币从历史高点大幅回落，群友纷纷讨论是否应该止损或抄底。"麻吉真成hype反指"成为当日热梗，大家对Hype后续走势看法分化。</div>
             <div class="topic-hint">
                 <div class="hint-title">💬 聊天记录 (15条)</div>
                 <div class="hint-snippets">
@@ -88,17 +89,17 @@
 <div class="hint-snippet">[大风吹来BNB -L]: 麻吉hype清算33.44</div>
 <div class="hint-snippet">[Xi]: 麻吉真成hype的反指了</div>
 <div class="hint-snippet">[土豆🥔赚]: hype这就结束了？😂 又要等回本了</div>
-<div class="hint-snippet">[didi didi]: hype好猛</div>
 <div class="hint-snippet">[Justin ccc]: 多了hype</div>
 <div class="hint-snippet">[Justin ccc]: 哪裡？剛剛H Y P E我直接轉空。</div>
 <div class="hint-snippet">[Mr. White]: hype 真硬</div>
-<div class="hint-snippet">[didi didi]: hype有过黑料吗</div>
 <div class="hint-snippet">[ㅤㅤ]: hype还能玩骚操作，现在不知道打补丁了没有</div>
 <div class="hint-snippet">[土豆🥔赚]: 华子发推就做空 真的每次都准啊</div>
 <div class="hint-snippet">[Justin ccc]: Hype，該踩踏了吧</div>
 <div class="hint-snippet">[大风吹来BNB -L]: 提到hype，做多hype</div>
 <div class="hint-snippet">[Roy]: hype是真抗跌，最低才跌到我的卖飞价😭</div>
 <div class="hint-snippet">[Flo Cowee]: 我也很想空单平仓</div>
+<div class="hint-snippet">[didi didi]: hype有过黑料吗</div>
+<div class="hint-snippet">[didi didi]: hype好猛</div>
                 </div>
             </div>
         </div>
@@ -107,8 +108,8 @@
             <div class="topic-header">
                 <span class="topic-category category-market">市场分析</span>
                 <div class="topic-title">BTC/ETH大幅回调 市场情绪恐慌</div>
-                <div class="topic-desc">加密市场遭遇大幅回调，BTC跌破75k，ETH跌幅超过SOL。群友讨论是否见底，抄底与止损成为热议话题。</div>
             </div>
+            <div class="topic-desc">加密市场遭遇大幅回调，BTC跌破75k，ETH跌幅超过SOL。群友讨论是否见底，抄底与止损成为热议话题，情绪在恐慌与期待间反复横跳。</div>
             <div class="topic-hint">
                 <div class="hint-title">💬 聊天记录 (20条)</div>
                 <div class="hint-snippets">
@@ -140,8 +141,8 @@
             <div class="topic-header">
                 <span class="topic-category category-invest">投资观点</span>
                 <div class="topic-title">Justin激进交易风格引围观</div>
-                <div class="topic-desc">Justin分享其激进的合约交易风格，追求极致回撤控制的同时开高杠杆。群友调侃"暴富就靠你了"，并讨论仓位管理与自主交易的重要性。</div>
             </div>
+            <div class="topic-desc">Justin分享其激进的合约交易风格，追求极致回撤控制的同时开高杠杆。群友调侃"暴富就靠你了"，并讨论仓位管理与自主交易的重要性。</div>
             <div class="topic-hint">
                 <div class="hint-title">💬 聊天记录 (20条)</div>
                 <div class="hint-snippets">
@@ -173,8 +174,8 @@
             <div class="topic-header">
                 <span class="topic-category category-invest">防骗警示</span>
                 <div class="topic-title">冒充猫老师带单诈骗事件</div>
-                <div class="topic-desc">有人冒充猫老师开设币安跟单服务，猫老师本人在群内紧急发布防诈骗声明，强调从不搞带单，社群集体声讨骗子。</div>
             </div>
+            <div class="topic-desc">有人冒充猫老师开设币安跟单服务，猫老师本人在群内紧急发布防诈骗声明，强调从不搞带单，社群集体声讨骗子，提醒大家提高警惕。</div>
             <div class="topic-hint">
                 <div class="hint-title">💬 聊天记录 (15条)</div>
                 <div class="hint-snippets">
@@ -201,8 +202,8 @@
             <div class="topic-header">
                 <span class="topic-category category-market">市场分析</span>
                 <div class="topic-title">黄金白银避险情绪升温</div>
-                <div class="topic-desc">群友热议贵金属走势，讨论上海银价与纽约银价的溢价关系。木头姐喊单HIP-4发布，市场对黄金白银关注度上升。</div>
             </div>
+            <div class="topic-desc">群友热议贵金属走势，讨论上海银价与纽约银价的溢价关系。木头姐喊单HIP-4发布，市场对黄金白银关注度上升，"黄金8000"成为共识目标。</div>
             <div class="topic-hint">
                 <div class="hint-title">💬 聊天记录 (15条)</div>
                 <div class="hint-snippets">
@@ -229,8 +230,8 @@
             <div class="topic-header">
                 <span class="topic-category category-invest">投资观点</span>
                 <div class="topic-title">交易心理学与仓位管理</div>
-                <div class="topic-desc">多位群友分享交易心得，反思杠杆使用、仓位控制与情绪管理的重要性。DCA反人性操作成为讨论焦点。</div>
             </div>
+            <div class="topic-desc">多位群友分享交易心得，反思杠杆使用、仓位控制与情绪管理的重要性。强调"仓位比方向重要"，DCA反人性操作成为讨论焦点。</div>
             <div class="topic-hint">
                 <div class="hint-title">💬 聊天记录 (15条)</div>
                 <div class="hint-snippets">
@@ -241,13 +242,13 @@
 <div class="hint-snippet">[Justin ccc]: 每次開單前，看這個大神說多，看那個人說空，對自己沒有信心，現在才反映過來，這不純韭菜嗎？</div>
 <div class="hint-snippet">[Jun Chen]: 他說他最好的倉位管理，就是不加槓桿</div>
 <div class="hint-snippet">[Justin ccc]: 然後我發現一件事情，我太追求槓桿，太追求每次都要高回報</div>
-<div class="hint-snippet">[寻｜halo]: D C A精髓本来就是反人性、没有预测顶底之说！如果你要D c A，收益递减原则，现在就是最好时候</div>
-<div class="hint-snippet">[寻｜halo]: 再来一根 当胡言乱语哈！爆仓太多！只想说：仓位比方向重复！不要怕人笑！根据自己风险编好开仓、自己的本金才是王</div>
+<div class="hint-snippet">[寻｜halo]: D C A精髓本来就是反人性、没有预测顶底之说</div>
+<div class="hint-snippet">[寻｜halo]: 仓位比方向重复！不要怕人笑！根据自己风险编好开仓、自己的本金才是王</div>
 <div class="hint-snippet">[wubai]: 俺24年仓位重的时候一天三次</div>
 <div class="hint-snippet">[Flo Cowee]: 开这么大仓位</div>
 <div class="hint-snippet">[美少女壮士Alita]: 猫是金字塔挂还是平均仓位挂的</div>
 <div class="hint-snippet">[x]: 大机会就要上大仓位</div>
-<div class="hint-snippet">[FFF zzz]: 快要爆仓又没爆仓的感觉最刺激，离你的爆仓价特别近，越近越刺激</div>
+<div class="hint-snippet">[FFF zzz]: 快要爆仓又没爆仓的感觉最刺激，离你的爆仓价特别近</div>
 <div class="hint-snippet">[cdsdwer]: 不过他能抓住时代趋势的情绪反扑某种意义上也确实是一个人才</div>
                 </div>
             </div>
@@ -257,8 +258,8 @@
             <div class="topic-header">
                 <span class="topic-category category-community">社群动态</span>
                 <div class="topic-title">新人欢迎与社群文化</div>
-                <div class="topic-desc">社群持续建设积分红包体系，新人进来被调侃要先发红包、照片。"进来就潜水是活不过大逃杀的"成为经典梗。</div>
             </div>
+            <div class="topic-desc">社群持续建设积分红包体系，新人进来被调侃要先发红包、照片。"进来就潜水是活不过大逃杀的"成为经典梗，社群氛围活跃热闹。</div>
             <div class="topic-hint">
                 <div class="hint-title">💬 聊天记录 (15条)</div>
                 <div class="hint-snippets">
@@ -285,8 +286,8 @@
             <div class="topic-header">
                 <span class="topic-category category-community">社群动态</span>
                 <div class="topic-title">跟单vs自主交易深度讨论</div>
-                <div class="topic-desc">社群深入讨论跟单服务的弊端，强调要有自己的交易方向。群友认为靠跟单无法实现盈利。</div>
             </div>
+            <div class="topic-desc">社群深入讨论跟单服务的弊端，强调要有自己的交易方向。"跟单的尽头是爆仓"成为共识，群友认为靠跟单无法实现盈利。</div>
             <div class="topic-hint">
                 <div class="hint-title">💬 聊天记录 (12条)</div>
                 <div class="hint-snippets">
